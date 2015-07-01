@@ -5,6 +5,7 @@ Const = require './const'
 
 # Static methods
 _onOpen = ->
+  Actions.call null, Const.SET_STATUS, Const.CONNECTED
   console.log 'Websocket >> Connected!'
 
 _onError = (e) ->
@@ -18,21 +19,25 @@ SocketClass = class SocketClass
     _socket: undefined
 
     _devConnect: ->
-      Actions.call null, Const.SET_STATUS, Const.CONNECTING
+      @_devConnecting
       setTimeout ->
         Actions.call null, Const.SET_STATUS, Const.CONNECTED
       , 4000
 
+    _devConnecting: ->
+      Actions.call null, Const.SET_STATUS, Const.CONNECTING
+
     initialize: (server) ->
-      @setServer(server)
+      @setServer(server).replace(/\/$/, '')
 
     setServer: (server) ->
-      @_server = server
+      console.log 'setServer'
+      @_server = server.replace(/\/$/, '')
 
     connect: ->
       Actions.call null, Const.SET_STATUS, Const.CONNECTING
 
-      @_socket = new WebSocket(@_server, 'json')
+      @_socket = new WebSocket(@_server)
       @_socket.onopen = _onOpen
       @_socket.onerror = _onError
       @_socket.onmessage = _onMessage

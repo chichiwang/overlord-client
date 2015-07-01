@@ -22,14 +22,18 @@ Stage = require 'components/stage'
 Screen = require 'components/screen'
 
 # Static methods
-setInitialized = (delay = 1000) ->
+setInitialized = (delay = 1) ->
 	setTimeout ->
 		RootActions.call null, RootConst.SET_INITIALIZED, true
 	, delay
 
-socketConnect = (delay = 1500) ->
+socketConnect = (delay = 1500, connectedDelay = 4000) ->
+	WS.setServer('ws://' + window.location.host + window.location.pathname)
 	setTimeout ->
-		WS._devConnect()
+		WS._devConnecting()
+		setTimeout ->
+			WS.connect()
+		, connectedDelay
 	, delay
 
 # Root View
