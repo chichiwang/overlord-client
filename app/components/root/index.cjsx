@@ -27,7 +27,7 @@ setInitialized = (delay = 1000) ->
 		RootActions.call null, RootConst.SET_INITIALIZED, true
 	, delay
 
-socketConnect = (delay = 3000) ->
+socketConnect = (delay = 1500) ->
 	setTimeout ->
 		WS._devConnect()
 	, delay
