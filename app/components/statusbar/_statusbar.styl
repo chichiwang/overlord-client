@@ -1,0 +1,88 @@
+// nib is a powerful lib for stylus that provides cross-browser css3 mixins.
+// No more vendor prefixes. http://visionmedia.github.com/nib/
+@import 'nib'
+
+#StatusBar
+  display: flex
+  padding: 0.5em
+  flex-wrap: wrap
+  justify-content: space-between
+  align-items: center
+  font-size: 1.25em
+  user-select: none
+  
+  .os
+    display: flex
+    max-width: 0px
+    align-items: center
+    opacity: 0
+    overflow: hidden
+    transition: max-width 1s ease-in-out 0.25s,
+                opacity 1.25s ease-in-out
+    .title
+      margin-left: 0.5em
+      letter-spacing: 0.2em
+      white-space: nowrap
+    .icon-skeletor
+      padding: 0.05em
+      font-size: 2em
+
+  .connection-status
+    display: flex
+    padding: 0.25em
+    align-items: center
+    border: 1px solid $primaryColor
+    border-radius: 0.2em
+    background-color: rgba($secondaryColor, 0.2)
+    opacity: 0
+    transition: opacity 1s ease-in-out
+    
+    &.connecting,
+    &.disconnected,
+    &.connected,
+    &.error
+      opacity: 1
+      
+    &.connected
+      transition: opacity 1s ease-in-out 2s
+      opacity: 0
+      
+    .connecting,
+    .connected,
+    .disconnected,
+    .error
+      display: none
+
+    .icon-spin.spinning
+      display: none
+      
+    &.connecting
+      .icon-spin.spinning
+        display: inline-block
+        animation: spinning 1.25s infinite linear
+      .connecting
+        margin-left: 0.5em
+        display: inline-block
+    
+    &.connected .connected
+      display: inline-block
+      
+  &.initialized
+    .os
+      max-width: 100%
+      opacity: 1
+      
+  @media screen and (max-width: 725px)
+    justify-content: center
+    
+    .os
+      width: 100%
+      justify-content: center
+    .connection-status
+      justify-content: center
+    
+@keyframes spinning
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)

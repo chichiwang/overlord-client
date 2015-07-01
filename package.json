@@ -1,0 +1,25 @@
+{
+  "name": "overlord-client",
+  "version": "0.1.0",
+  "description": "The client-side code for the Overlord exercise in the Level-Up program",
+  "main": "app.js",
+  "scripts": {
+    "install": "bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": false,
+  "authors": [
+    "Chi-chi Wang <chichi@wangchiyi.com>"
+  ],
+  "dependencies": {
+    "brunch": "*",
+    "traceur-brunch": "*",
+    "auto-reload-brunch": "*",
+    "cjsx-brunch": "*",
+    "css-brunch": "*",
+    "stylus-brunch": "*",
+    "javascript-brunch": "*",
+    "uglify-js-brunch": "*"
+  },
+  "devDependencies": {}
+}

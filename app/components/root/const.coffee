@@ -1,0 +1,2 @@
+module.exports =
+  SET_INITIALIZED: 'ROOT:SET_INITIALIZED'

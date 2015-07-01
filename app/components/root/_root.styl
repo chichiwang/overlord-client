@@ -1,0 +1,22 @@
+// nib is a powerful lib for stylus that provides cross-browser css3 mixins.
+// No more vendor prefixes. http://visionmedia.github.com/nib/
+@import 'nib'
+
+*
+  box-sizing: border-box
+
+body
+  font-family: 'Ubuntu Mono', monospace
+  color: $primaryColor
+
+#Site-Container
+  position: relative
+  overflow: hidden
+ 
+#Root
+  display: flex
+  flex-flow: column
+  position: relative
+  padding-top: 1px
+  background-color: #000000
+  z-index: 1

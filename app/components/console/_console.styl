@@ -1,0 +1,33 @@
+// nib is a powerful lib for stylus that provides cross-browser css3 mixins.
+// No more vendor prefixes. http://visionmedia.github.com/nib/
+@import 'nib'
+
+#Console
+  display: flex
+  flex-flow: column
+  width: 70%
+  overflow: hidden
+  // background: green
+  perspective: 800px
+  perspective-origin: 0% 50%
+  $hardwareAccel()
+  
+  .wrapper
+    display: flex
+    flex-flow: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    flex: 2
+    transform: rotateY(45deg)
+    transform-origin: 0% 50%
+    transition: transform 400ms linear
+
+    .console-screens
+      width: 80%
+      min-height: 500px
+      background-color: green
+
+  &.active
+    .wrapper
+      transform: rotateY(0deg) translateX(0em) translateZ(0em)
