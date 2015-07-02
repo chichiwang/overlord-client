@@ -55,6 +55,8 @@ Root = React.createClass
 		site = @state.site
 		socket = @state.socket
 
+		console.log 'Render: ', socket
+
 		<div id="Root" style={@styles()}>
 			<StatusBar initialized={ root.initialized } socket={ socket.status } />
 			<Stage />

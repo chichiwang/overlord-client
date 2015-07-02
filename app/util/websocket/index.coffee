@@ -12,6 +12,7 @@ _onError = (e) ->
   console.log 'Websocket >> Error: ', e
 
 _onMessage = (msg) ->
+  Actions.call null, Const.SET_MESSAGE, JSON.parse(msg.data)
   console.log 'Websocket >> Message received: ', msg
 
 SocketClass = class SocketClass

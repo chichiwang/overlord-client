@@ -9,7 +9,7 @@ Item = require './components/menuitem'
 # Static variables
 menuItems = [
   { name: 'boot', title: "Boot Menu", size: 2 },
-  { name: 'terminal', title: "Terminal", size: 2 },
+  { name: 'command', title: "Command Panel", size: 2 },
   { name: 'access', title: "Access Panel", size: 2 }
 ]
 
