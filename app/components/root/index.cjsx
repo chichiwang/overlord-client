@@ -55,11 +55,9 @@ Root = React.createClass
 		site = @state.site
 		socket = @state.socket
 
-		console.log 'Render: ', socket
-
 		<div id="Root" style={@styles()}>
 			<StatusBar initialized={ root.initialized } socket={ socket.status } />
-			<Stage />
+			<Stage socket={ socket.status } bomb={ socket.message } />
 			<Screen width={ site.width } height={ site.height } />
 		</div>
 

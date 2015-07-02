@@ -9,6 +9,11 @@
   width: 100%
   // background: red
   overflow: hidden
+  transition: opacity 500ms ease-in
+  
+  &.hide
+    opacity: 0
+    pointer-events: none
   
   .stage-wrapper
     display: flex

@@ -21,6 +21,11 @@ _wrapperStyles = ->
     'menu-active': @state.menuIsOpen
   })
 
+_stageStyles = ->
+  cx({
+    'hide': @props.socket != 'connected' && !@props.bomb
+  })
+
 _menuOver = ->
   @setState { menuIsOpen: true }
 
@@ -39,7 +44,9 @@ Stage = React.createClass
     @out = _menuOut.bind(@)
 
   render: ->
-    <div id="Stage">
+    console.log 'Stage: ', @props.socket, @props.bomb
+
+    <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
         <Menu height={ stageHeight } onOver={ @over } onOut={ @out } isOpen={ @state.menuIsOpen } />
         <Console height={ stageHeight } menuIsOpen={ @state.menuIsOpen } />
