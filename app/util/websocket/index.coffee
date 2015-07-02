@@ -29,11 +29,11 @@ SocketClass = class SocketClass
       Actions.call null, Const.SET_STATUS, Const.CONNECTING
 
     initialize: (server) ->
-      @setServer(server).replace(/\/$/, '')
+      @setServer(server)
 
     setServer: (server) ->
       console.log 'setServer'
-      @_server = server.replace(/\/$/, '')
+      @_server = server
 
     connect: ->
       Actions.call null, Const.SET_STATUS, Const.CONNECTING
