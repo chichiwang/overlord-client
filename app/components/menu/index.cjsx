@@ -17,7 +17,13 @@ _itemLeave = ->
   Actions.call Const.SET_FOCUSED, undefined
 
 _itemClick = (itemName)->
-  Actions.call Const.set_SELECTED, itemName
+  Actions.call Const.SET_SELECTED, itemName
+
+_menuEnter = ->
+  Actions.call Const.SET_MENU_OPEN, true
+
+_menuLeave = ->
+  Actions.call Const.SET_MENU_OPEN, false
 
 # Menu view component
 Menu = React.createClass
@@ -25,14 +31,9 @@ Menu = React.createClass
   mixins: [SyncState]
   stores: Store
 
-  _mouseEnter: ->
-    @props.onOver()
-  _mouseLeave: ->
-    @props.onOut()
-
   _menuClasses: ->
     cx({
-      active: @props.isOpen
+      active: @state.menuOpen
     })
 
   _menuStyles: ->
@@ -48,7 +49,7 @@ Menu = React.createClass
     # console.log 'Menu Render: ', @props.bombState
     <div id="Menu" className={ @_menuClasses() } style={ @_menuStyles() }>
       <div className="wrapper" style={ @_menuStyles() }>
-        <div className="menu-items" onMouseEnter={ @_mouseEnter } onMouseLeave={ @_mouseLeave }>
+        <div className="menu-items" onMouseEnter={ _menuEnter } onMouseLeave={ _menuLeave }>
           { Factory.items() }
         </div>
       </div>

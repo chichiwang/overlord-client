@@ -1,7 +1,10 @@
 # @cjsx React.DOM
 'use strict'
 
+MenuStore = require 'components/menu/store'
+
 cx = require 'util/cx'
+SyncState = require 'util/mixins/syncstate'
 
 # Child views
 Menu = require 'components/menu'
@@ -9,7 +12,6 @@ Console = require 'components/console'
 
 # Static variables
 stageHeight = 0
-menuIsOpen = false
 
 # Static methods
 _getStageHeight = ->
@@ -18,7 +20,7 @@ _getStageHeight = ->
 _wrapperStyles = ->
   cx({
     'stage-wrapper': true
-    'menu-active': @state.menuIsOpen
+    'menu-active': @state.menu.menuOpen
   })
 
 _stageStyles = ->
@@ -26,31 +28,22 @@ _stageStyles = ->
     'hide': @props.socket != 'connected' && !@props.bomb
   })
 
-_menuOver = ->
-  @setState { menuIsOpen: true }
-
-_menuOut = ->
-  @setState { menuIsOpen: false }
-
 # Stage view-component
 Stage = React.createClass
   displayName: 'Stage'
-
-  getInitialState: ->
-    { menuIsOpen: false }
-
-  componentWillMount: ->
-    @over = _menuOver.bind(@)
-    @out = _menuOut.bind(@)
+  mixins: [SyncState]
+  stores:
+    menu: MenuStore
 
   render: ->
+    menuState = @state.menu
     bombState = @props.bomb.state if @props.bomb
     # console.log 'Stage: ', bombState
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
-        <Menu height={ stageHeight } onOver={ @over } onOut={ @out } isOpen={ @state.menuIsOpen } bombState={ bombState } />
-        <Console height={ stageHeight } menuIsOpen={ @state.menuIsOpen } />
+        <Menu height={ stageHeight } bombState={ bombState } />
+        <Console height={ stageHeight } menuOpen={ menuState.menuOpen } />
       </div>
     </div>
 
@@ -58,10 +51,7 @@ Stage = React.createClass
     stageHeight = _getStageHeight()
 
   componentDidUpdate: ->
-    console.log 'Stage', Menu
+    # console.log 'Stage', Menu
     stageHeight = _getStageHeight()
-
-  componentWillUnmount: ->
-
 
 module.exports = Stage

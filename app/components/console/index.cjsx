@@ -11,7 +11,7 @@ Console = React.createClass
 
   _consoleClasses: ->
     cx({
-      'active': !@props.menuIsOpen
+      'active': !@props.menuOpen
     })
 
   render: ->
