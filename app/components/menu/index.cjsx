@@ -2,60 +2,17 @@
 'use strict'
 
 cx = require 'util/cx'
-
-# Child views
-Item = require './components/menuitem'
-
-# Static variables
-menuItems = [
-  { name: 'boot', title: "Boot Menu", size: 2, validStates: ['boot', 'inactive'] },
-  { name: 'command', title: "Command Panel", size: 2, validStates: ['inactive', 'active'] },
-  { name: 'access', title: "Access Panel", size: 2, validStates: ['inactive', 'active'] }
-]
+Factory = require './menuFactory'
 
 # Static methods
-_itemFactory = (list) ->
-  activeItem = @state.activeItem
-  validItems = _validItems(@props.state)
-  console.log '_itemFactory', @props.state, validItems
-  items = []
-
-  isPrejacent = (idx) ->
-    validItems[idx + 1] && validItems[idx + 1].name == activeItem
-
-  isPostJacent = (idx) ->
-    validItems[idx - 1] && validItems[idx - 1].name == activeItem
-
-  isActive = (idx) ->
-    validItems[idx].name == activeItem
-
-  for item, idx in validItems
-    if activeItem
-      if isPrejacent(idx)
-        validItems[idx].size = -1
-      else if isPostJacent(idx)
-        validItems[idx].size = 1
-      else if isActive(idx)
-        validItems[idx].size = 0
-      else
-        validItems[idx].size = 2
-    else
-      validItems[idx].size = 2
-    items.push <Item key={ "k-" + item.name } data={ item } onOver={ @itemEnter } onOut={ @itemLeave } />
-
-  items
-
 _itemEnter = (itemName) ->
-  @setState { activeItem: itemName }
+  @setState { focusedItem: itemName }
 
 _itemLeave = ->
-  @setState { activeItem: undefined }
+  @setState { focusedItem: undefined }
 
-_validItems = (state) ->
-  items = []
-  for item in menuItems
-    items.push(item) if state && state in item.validStates
-  items
+_itemClick = (itemName)->
+  @setState { selectedItem: itemName }
 
 # Menu view component
 Menu = React.createClass
@@ -75,18 +32,23 @@ Menu = React.createClass
     { 'max-height': @props.height }
 
   getInitialState: ->
-    { activeItem: undefined }
+    {
+      focusedItem: undefined,
+      selectedItem: undefined
+    }
 
   componentWillMount: ->
-    @itemEnter = _itemEnter.bind(@)
-    @itemLeave = _itemLeave.bind(@)
+    Factory.setContext(@)
+    Factory.setEnter(_itemEnter.bind(@))
+    Factory.setLeave(_itemLeave.bind(@))
+    Factory.setClick(_itemClick.bind(@))
 
   render: ->
-    console.log 'Menu Render: ', @props.state
+    # console.log 'Menu Render: ', @props.bombState
     <div id="Menu" className={ @_menuClasses() } style={ @_menuStyles() }>
       <div className="wrapper" style={ @_menuStyles() }>
         <div className="menu-items" onMouseEnter={ @_mouseEnter } onMouseLeave={ @_mouseLeave }>
-          { _itemFactory.call(@) }
+          { Factory.items() }
         </div>
       </div>
     </div>

@@ -9,9 +9,9 @@
   opacity: 0.5
   cursor: pointer
   transition: all 250ms ease-in-out
-  // background-color: red
   
   .btn
+    position: relative
     width: 100%
     padding: 0.25em
     text-align: center
@@ -19,13 +19,29 @@
     border: 3px solid rgba($primaryColor, 0.8)
     border-radius: 0.25em
     background-color: rgba($secondaryColor, 0.2)
+    
+  .arrow
+    display: block
+    position: absolute
+    top: 0em
+    font-size: 1.5em
+    opacity: 0
+    transition: opacity 500ms ease-out
+    &.icon-tri-right
+      left: -10px
+    &.icon-tri-left
+      right: -10px
+  
+  &.selected
+    cursor: default
+    .arrow
+      opacity: 1
   
   &.active
     padding: .75em
     transform: scale(1.30)
     opacity: 1
     
-  &.pre1
-  &.post1
+  &.adjacent
     padding: 0.4em
     transform: scale(1.15, 1.0)

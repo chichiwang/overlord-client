@@ -45,11 +45,11 @@ Stage = React.createClass
 
   render: ->
     bombState = @props.bomb.state if @props.bomb
-    console.log 'Stage: ', bombState
+    # console.log 'Stage: ', bombState
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
-        <Menu height={ stageHeight } onOver={ @over } onOut={ @out } isOpen={ @state.menuIsOpen } state={ bombState } />
+        <Menu height={ stageHeight } onOver={ @over } onOut={ @out } isOpen={ @state.menuIsOpen } bombState={ bombState } />
         <Console height={ stageHeight } menuIsOpen={ @state.menuIsOpen } />
       </div>
     </div>
