@@ -12,6 +12,8 @@ Console = require 'components/console'
 
 # Static variables
 stageHeight = 0
+bombStateHistory = [undefined]
+switchActive = { boot: [undefined] }
 
 # Static methods
 _getStageHeight = ->
@@ -28,6 +30,22 @@ _stageStyles = ->
     'hide': @props.socket != 'connected' && !@props.bomb
   })
 
+_getActiveMenuItem = (bombState, selectedMenu) ->
+  if bombState of switchActive && bombStateHistory[0] in switchActive[bombState]
+    bombState
+  else
+    selectedMenu
+
+_getActiveConsole = () ->
+  # ...
+
+_updateBombStateHistory = (bombState) ->
+  if bombStateHistory.length == 1
+    bombStateHistory.push(bombState)
+  return if bombStateHistory[1] == bombState
+  bombStateHistory[0] = bombStateHistory[1]
+  bombStateHistory[1] = bombState
+
 # Stage view-component
 Stage = React.createClass
   displayName: 'Stage'
@@ -38,11 +56,13 @@ Stage = React.createClass
   render: ->
     menuState = @state.menu
     bombState = @props.bomb.state if @props.bomb
-    # console.log 'Stage: ', bombState
+
+    _updateBombStateHistory(bombState)
+    activeItem = _getActiveMenuItem(bombState, menuState.selectedItem)
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
-        <Menu height={ stageHeight } bombState={ bombState } />
+        <Menu height={ stageHeight } bombState={ bombState } activeItem={ activeItem } />
         <Console height={ stageHeight } menuOpen={ menuState.menuOpen } />
       </div>
     </div>

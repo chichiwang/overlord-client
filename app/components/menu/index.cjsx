@@ -46,7 +46,6 @@ Menu = React.createClass
     Factory.setClick(_itemClick.bind(@))
 
   render: ->
-    # console.log 'Menu Render: ', @props.bombState
     <div id="Menu" className={ @_menuClasses() } style={ @_menuStyles() }>
       <div className="wrapper" style={ @_menuStyles() }>
         <div className="menu-items" onMouseEnter={ _menuEnter } onMouseLeave={ _menuLeave }>

@@ -1,10 +1,12 @@
 # @cjsx React.DOM
 
+Actions = require './actions'
+Const = require './const'
+
 # Child views
 Item = require './components/menuitem'
 
 # Static variables
-bombStateHistory = [undefined]
 menuItems = [
   {
     name: 'boot',
@@ -22,7 +24,6 @@ menuItems = [
     defaultState: 'active, inactive'
     displayStates: ['inactive', 'active'],
     switchStates: {
-                    boot: ['inactive'],
                     undefined: ['inactive', 'active']
                   },
     selected: false
@@ -42,13 +43,12 @@ menuItems = [
 _items = (enter, leave, click)->
   bombState = @props.bombState
   focusedItem = @state.focusedItem
-  selectedItem = @state.selectedItem
-
-  _updateBombStateHistory(bombState)
+  activeItem = @props.activeItem
 
   items = _displayedItems(bombState)
   items = _applySizes(items, focusedItem)
-  items = _applySelected(items, selectedItem)
+  items = _applySelected(items, activeItem)
+
   _generateMenuItems(items, enter, leave, click)
 
 _displayedItems = (bombState) ->
@@ -78,22 +78,10 @@ _applySizes = (items, focusedItem) ->
 
   items
 
-_applySelected = (items, selectedItem)->
-  prevBombState = bombStateHistory[0]
-  currBombState = bombStateHistory[1]
-
+_applySelected = (items, activeItem)->
   for item in items
-    item.selected = if item.name == selectedItem then true else false
-    if item.switchStates[prevBombState]
-      item.selected = true if currBombState in item.switchStates[prevBombState]
+    item.selected = if item.name == activeItem then true else false
   items
-
-_updateBombStateHistory = (bombState) ->
-  if bombStateHistory.length == 1
-    bombStateHistory.push(bombState)
-  return if bombStateHistory[1] == bombState
-  bombStateHistory[0] = bombStateHistory[1]
-  bombStateHistory[1] = bombState
 
 _generateMenuItems = (itemsList, enter, leave, click) ->
   items = []
