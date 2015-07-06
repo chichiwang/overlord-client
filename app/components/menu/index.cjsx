@@ -1,22 +1,29 @@
 # @cjsx React.DOM
 'use strict'
 
+Store = require './store'
+Actions = require './actions'
+Const = require './const'
+
 cx = require 'util/cx'
+SyncState = require 'util/mixins/syncstate'
 Factory = require './menuFactory'
 
 # Static methods
 _itemEnter = (itemName) ->
-  @setState { focusedItem: itemName }
+  Actions.call Const.SET_FOCUSED, itemName
 
 _itemLeave = ->
-  @setState { focusedItem: undefined }
+  Actions.call Const.SET_FOCUSED, undefined
 
 _itemClick = (itemName)->
-  @setState { selectedItem: itemName }
+  Actions.call Const.set_SELECTED, itemName
 
 # Menu view component
 Menu = React.createClass
   displayName: 'Menu'
+  mixins: [SyncState]
+  stores: Store
 
   _mouseEnter: ->
     @props.onOver()
@@ -30,12 +37,6 @@ Menu = React.createClass
 
   _menuStyles: ->
     { 'max-height': @props.height }
-
-  getInitialState: ->
-    {
-      focusedItem: undefined,
-      selectedItem: undefined
-    }
 
   componentWillMount: ->
     Factory.setContext(@)

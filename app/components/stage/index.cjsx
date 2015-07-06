@@ -58,6 +58,7 @@ Stage = React.createClass
     stageHeight = _getStageHeight()
 
   componentDidUpdate: ->
+    console.log 'Stage', Menu
     stageHeight = _getStageHeight()
 
   componentWillUnmount: ->
