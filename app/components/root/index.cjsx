@@ -17,7 +17,7 @@ SyncState = require 'util/mixins/syncstate'
 WS = require 'util/websocket'
 
 # Child views
-StatusBar = require 'components/statusbar'
+Header = require 'components/header'
 Stage = require 'components/stage'
 ScreenOverlay = require 'components/overlay'
 
@@ -56,7 +56,7 @@ Root = React.createClass
 		socket = @state.socket
 
 		<div id="Root" style={@styles()}>
-			<StatusBar initialized={ root.initialized } socket={ socket.status } />
+			<Header initialized={ root.initialized } socket={ socket.status } />
 			<Stage socket={ socket.status } bomb={ socket.message } />
 			<ScreenOverlay width={ site.width } height={ site.height } />
 		</div>

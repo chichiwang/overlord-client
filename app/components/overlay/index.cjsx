@@ -1,8 +1,8 @@
 # @cjsx React.DOM
 'use strict'
 
-Screen = React.createClass
-  displayName: 'Screen'
+Overlay = React.createClass
+  displayName: 'Overlay'
 
   styles: ->
     {
@@ -16,4 +16,4 @@ Screen = React.createClass
       <div className="scanline" />
     </div>
 
-module.exports = Screen
+module.exports = Overlay
