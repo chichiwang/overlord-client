@@ -36,9 +36,6 @@ _getActiveMenuItem = (bombState, selectedMenu) ->
   else
     selectedMenu
 
-_getActiveConsole = ->
-  # ...
-
 _updateBombStateHistory = (bombState) ->
   if bombStateHistory.length == 1
     bombStateHistory.push(bombState)
@@ -63,7 +60,7 @@ Stage = React.createClass
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
         <Menu height={ stageHeight } bombState={ bombState } activeItem={ activeItem } />
-        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } />
+        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } page={ activeItem } />
       </div>
     </div>
 

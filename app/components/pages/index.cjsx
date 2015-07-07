@@ -4,10 +4,15 @@
 cx = require 'util/cx'
 
 # Child views
+Access = require './components/access'
 Boot = require './components/boot'
+Code = require './components/code'
 
 Pages = React.createClass
   displayName: 'Pages'
+
+  _wrapper_styles: ->
+    { 'height': @props.height * 0.8 }
 
   _styles: ->
     { 'max-height': @props.height }
@@ -15,12 +20,19 @@ Pages = React.createClass
   _classes: ->
     cx({
       'active': !@props.menuOpen
+      'boot': @props.page == 'boot'
+      'code': @props.page == 'code'
+      'access': @props.page == 'access'
     })
 
   render: ->
     <div id="Pages" className={ @_classes() } style={ @_styles() }>
       <div className="wrapper">
-        <Boot />
+        <div className="page-wrapper" style={ @_wrapper_styles() }>
+          <Boot />
+          <Code />
+          <Access />
+        </div>
       </div>
     </div>
 

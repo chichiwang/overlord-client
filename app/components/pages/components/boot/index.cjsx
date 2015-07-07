@@ -6,7 +6,9 @@ Boot = React.createClass
 
   render: ->
     <div className="boot page">
-      <p>Boot Menu</p>
+      <div className="pane">
+        <div className="title">Boot Configuration</div>
+      </div>
     </div>
 
 module.exports = Boot
