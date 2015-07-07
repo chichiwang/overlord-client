@@ -3,8 +3,8 @@
 
 cx = require 'util/cx'
 
-Page = React.createClass
-  displayName: 'Page'
+Pages = React.createClass
+  displayName: 'Pages'
 
   _consoleStyles: ->
     { 'max-height': @props.height }
@@ -15,12 +15,12 @@ Page = React.createClass
     })
 
   render: ->
-    <div id="Page" className={ @_consoleClasses() } style={ @_consoleStyles() }>
+    <div id="Pages" className={ @_consoleClasses() } style={ @_consoleStyles() }>
       <div className="wrapper">
-        <div className="pages">
+        <div className="page">
           <p>Page</p>
         </div>
       </div>
     </div>
 
-module.exports = Page
+module.exports = Pages
