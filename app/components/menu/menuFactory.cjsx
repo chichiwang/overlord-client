@@ -18,8 +18,8 @@ menuItems = [
     selected: false
   },
   {
-    name: 'command',
-    title: "Command Panel",
+    name: 'code',
+    title: "Input Code",
     size: 2,
     defaultState: 'active, inactive'
     displayStates: ['inactive', 'active'],

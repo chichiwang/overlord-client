@@ -3,8 +3,8 @@
 
 cx = require 'util/cx'
 
-Console = React.createClass
-  displayName: 'Console'
+Page = React.createClass
+  displayName: 'Page'
 
   _consoleStyles: ->
     { 'max-height': @props.height }
@@ -15,12 +15,12 @@ Console = React.createClass
     })
 
   render: ->
-    <div id="Console" className={ @_consoleClasses() } style={ @_consoleStyles() }>
+    <div id="Page" className={ @_consoleClasses() } style={ @_consoleStyles() }>
       <div className="wrapper">
-        <div className="console-screens">
-          <p>Console Page</p>
+        <div className="pages">
+          <p>Page</p>
         </div>
       </div>
     </div>
 
-module.exports = Console
+module.exports = Page

@@ -8,7 +8,7 @@ SyncState = require 'util/mixins/syncstate'
 
 # Child views
 Menu = require 'components/menu'
-Console = require 'components/console'
+Page = require 'components/page'
 
 # Static variables
 stageHeight = 0
@@ -36,7 +36,7 @@ _getActiveMenuItem = (bombState, selectedMenu) ->
   else
     selectedMenu
 
-_getActiveConsole = () ->
+_getActiveConsole = ->
   # ...
 
 _updateBombStateHistory = (bombState) ->
@@ -63,7 +63,7 @@ Stage = React.createClass
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
         <Menu height={ stageHeight } bombState={ bombState } activeItem={ activeItem } />
-        <Console height={ stageHeight } menuOpen={ menuState.menuOpen } />
+        <Page height={ stageHeight } menuOpen={ menuState.menuOpen } />
       </div>
     </div>
 
