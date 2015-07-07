@@ -3,23 +3,24 @@
 
 cx = require 'util/cx'
 
+# Child views
+Boot = require './components/boot'
+
 Pages = React.createClass
   displayName: 'Pages'
 
-  _consoleStyles: ->
+  _styles: ->
     { 'max-height': @props.height }
 
-  _consoleClasses: ->
+  _classes: ->
     cx({
       'active': !@props.menuOpen
     })
 
   render: ->
-    <div id="Pages" className={ @_consoleClasses() } style={ @_consoleStyles() }>
+    <div id="Pages" className={ @_classes() } style={ @_styles() }>
       <div className="wrapper">
-        <div className="page">
-          <p>Page</p>
-        </div>
+        <Boot />
       </div>
     </div>
 
