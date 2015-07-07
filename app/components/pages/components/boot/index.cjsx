@@ -1,13 +1,17 @@
 # @cjsx React.DOM
 'use strict'
 
+# Child views
+Input = require '../input'
+
 Boot = React.createClass
   displayName: 'Boot'
 
   render: ->
     <div className="boot page">
+      <div className="title">Configuration</div>
       <div className="pane">
-        <div className="title">Boot Configuration</div>
+        <Input label="Activation Code" />
       </div>
     </div>
 

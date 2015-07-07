@@ -6,8 +6,8 @@ Access = React.createClass
 
   render: ->
     <div className="access page">
+      <div className="title">Access Panel</div>
       <div className="pane">
-        <div className="title">Access Panel</div>
       </div>
     </div>
 

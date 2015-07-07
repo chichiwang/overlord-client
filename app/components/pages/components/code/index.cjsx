@@ -6,8 +6,8 @@ Code = React.createClass
 
   render: ->
     <div className="code page">
+      <div className="title">Command Prompt</div>
       <div className="pane">
-        <div className="title">Command Prompt</div>
       </div>
     </div>
 

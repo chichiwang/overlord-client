@@ -29,6 +29,9 @@
       perspective: 800px
     
     .page
+      display: flex
+      flex-flow: column
+      align-items: center
       position: absolute
       top: 0
       left: 0
@@ -42,10 +45,19 @@
                   opacity 400ms linear 400ms
       pointer-events: none
       
+      .title
+        padding: 0.5em 1em
+        font-size: 1.75em
+        border-radius: 0 15px
+        animation: flicker 300ms steps(6) infinite
+      
       .pane
+        display: flex
+        flex-flow: column
         position: relative
         padding: 1px 1em 1em 1em
-        height: 100%
+        width: 100%
+        flex: 2
         text-align: center
         border: 3px solid rgba($primaryColor, 0.75)
         border-radius: 15px
@@ -62,12 +74,10 @@
           z-index: -1
           background-color: #000000
         
-      .title
-        display: inline-block
-        padding: 0.5em 1em
-        font-size: 1.5em
-        border-radius: 0 15px
-        // background-color: rgba($secondaryColor, 0.25)
+        .row
+          display: flex
+          min-height: 60px
+          // border: 1px solid red
       
   &.boot .page.boot
     transform: translateX(0) translateZ(0) rotateY(0)
@@ -87,3 +97,25 @@
   &.active
     .wrapper
       transform: rotateY(0deg) translateX(0em) translateZ(0em)
+      
+@keyframes flicker
+  0%
+    opacity: 0.9
+  30%
+    opacity 0.8
+  34%
+    opacity: 0.5
+  58%
+    opacity: 0.75
+  60%
+    opacity: 0.85
+  96%
+    opacity: 0.75
+
+@keyframes blink
+  0%
+    opacity: 1
+  50%
+    opacity: 0
+    
+@import './components/input/_input'
