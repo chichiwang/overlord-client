@@ -45,6 +45,11 @@
                   opacity 400ms linear 400ms
       pointer-events: none
       
+      &.active
+        transform: translateX(0) translateZ(0) rotateY(0)
+        opacity: 1
+        pointer-events: auto
+
       .title
         padding: 0.5em 1em
         font-size: 1.75em
@@ -79,20 +84,20 @@
           min-height: 60px
           // border: 1px solid red
       
-  &.boot .page.boot
-    transform: translateX(0) translateZ(0) rotateY(0)
-    opacity: 1
-    pointer-events: auto
+  // &.boot .page.boot
+  //   transform: translateX(0) translateZ(0) rotateY(0)
+  //   opacity: 1
+  //   pointer-events: auto
   
-  &.code .page.code
-    transform: translateX(0) translateZ(0) rotateY(0)
-    opacity: 1
-    pointer-events: auto
+  // &.code .page.code
+  //   transform: translateX(0) translateZ(0) rotateY(0)
+  //   opacity: 1
+  //   pointer-events: auto
     
-  &.access .page.access
-    transform: translateX(0) translateZ(0) rotateY(0)
-    opacity: 1
-    pointer-events: auto
+  // &.access .page.access
+  //   transform: translateX(0) translateZ(0) rotateY(0)
+  //   opacity: 1
+  //   pointer-events: auto
 
   &.active
     .wrapper

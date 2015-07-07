@@ -1,8 +1,19 @@
 # @cjsx React.DOM
 'use strict'
 
+KeyStore = require 'util/keypress/store'
+
+# Static methods
+_keyPressed = (val) ->
+  return unless @props.active
+  console.log 'Input | Key pressed >> ', val.lastPressed
+
 Input = React.createClass
   displayName: 'Input'
+
+  componentWillMount: ->
+    @keypressHandler = _keyPressed.bind(@)
+    KeyStore.on('change', @keypressHandler)
 
   render: ->
     <div className="input row">
@@ -22,5 +33,8 @@ Input = React.createClass
         </div>
       </div>
     </div>
+
+  componentWillUnmount: ->
+    Keystore.off('change', @keypressHandler)
 
 module.exports = Input
