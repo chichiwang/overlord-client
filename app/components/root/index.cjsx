@@ -19,7 +19,7 @@ WS = require 'util/websocket'
 # Child views
 StatusBar = require 'components/statusbar'
 Stage = require 'components/stage'
-Screen = require 'components/screen'
+ScreenOverlay = require 'components/overlay'
 
 # Static methods
 setInitialized = (delay = 1) ->
@@ -58,7 +58,7 @@ Root = React.createClass
 		<div id="Root" style={@styles()}>
 			<StatusBar initialized={ root.initialized } socket={ socket.status } />
 			<Stage socket={ socket.status } bomb={ socket.message } />
-			<Screen width={ site.width } height={ site.height } />
+			<ScreenOverlay width={ site.width } height={ site.height } />
 		</div>
 
 	componentDidMount: ->
