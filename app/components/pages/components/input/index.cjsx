@@ -8,6 +8,16 @@ KeyStore = require 'util/keypress/store'
 keyMap = {
   37: 'left'
   39: 'right'
+  48: '0'
+  49: '1'
+  50: '2'
+  51: '3'
+  52: '4'
+  53: '5'
+  54: '6'
+  55: '7'
+  56: '8'
+  57: '9'
 }
 
 # Static methods
@@ -33,6 +43,19 @@ _keyPressed = (val) ->
     @setState { position: @state.position - 1 } unless @state.position == 1
   if keyMap[keyCode] == 'right'
     @setState { position: @state.position + 1 } unless @state.position == @valLength
+
+  if _keyIsNumeral(keyCode)
+    @valueMap[@state.position - 1] = keyMap[keyCode]
+
+    @props.onUpdate(@valueMap.join(''))
+
+    if @state.position == @valLength
+      @setState { position: 1 }
+    else
+      @setState { position: @state.position + 1 }
+
+_keyIsNumeral = (keyCode) ->
+  keyCode > 47 && keyCode < 58
 
 _generateKeys = (val) ->
   keys = []
@@ -63,13 +86,14 @@ Input = React.createClass
 
   componentWillMount: ->
     @classes = _classes.bind(@)
-    @keypressHandler = _keyPressed.bind(@)
-    KeyStore.on('change', @keypressHandler)
     @cursorStyles = _cursorStyles.bind(@)
     @updateDimensions = _updateDimensions.bind(@)
 
     @valLength = @props.val.length if @props.val
     @valueMap = @props.val.split('') if @props.val
+
+    @keypressHandler = _keyPressed.bind(@)
+    KeyStore.on('change', @keypressHandler)
 
   componentWillUpdate: (newProps) ->
     @valueMap = newProps.val.split('') if newProps.val

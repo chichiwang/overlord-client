@@ -14,30 +14,40 @@ keyMap = {
 }
 
 # Static methods
+_classes = ->
+  cx({
+    boot: true
+    page: true
+    active: @props.active
+  })
+
 _keypressed = (val) ->
   return unless @props.active
   code = val.lastPressed
   console.log 'Boot page | Key pressed >> ', keyMap[code]
 
+_updateActivation = (val) ->
+  @setState { activation: val }
+
 Boot = React.createClass
   displayName: 'Boot'
 
-  _classes: ->
-    cx({
-      boot: true
-      page: true
-      active: @props.active
-    })
+  getInitialState: ->
+    {
+      activation: '1234'
+    }
 
   componentWillMount: ->
+    @classes = _classes.bind(@)
+    @updateActivation = _updateActivation.bind(@)
     @keypressed = _keypressed.bind(@)
     KeyStore.on('change', @keypressed)
 
   render: ->
-    <div className={ @_classes() }>
+    <div className={ @classes() }>
       <div className="title">Configuration</div>
       <div className="pane">
-        <Input label="Activation Code" val="1234" active={ true } />
+        <Input label="Activation Code" val={ @state.activation } onUpdate={ @updateActivation } active={ true } />
       </div>
     </div>
 
