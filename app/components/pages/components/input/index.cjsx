@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 'use strict'
 
+cx = require 'util/cx'
 KeyStore = require 'util/keypress/store'
 
 # Static variables
@@ -10,6 +11,13 @@ keyMap = {
 }
 
 # Static methods
+_classes = ->
+  cx({
+    input: true
+    row: true
+    active: @props.active
+  })
+
 _cursorStyles = ->
   modifier = @state.position - 1
   offset = @leftOffset + (@keyWidth / 2) - (@arrowWidth / 2)
@@ -54,6 +62,7 @@ Input = React.createClass
     { position: 1 }
 
   componentWillMount: ->
+    @classes = _classes.bind(@)
     @keypressHandler = _keyPressed.bind(@)
     KeyStore.on('change', @keypressHandler)
     @cursorStyles = _cursorStyles.bind(@)
@@ -67,7 +76,7 @@ Input = React.createClass
 
   render: ->
     # console.log 'Input position: ', @state.position
-    <div className="input row">
+    <div className={ @classes() } >
       <div className="label">
         { @props.label }
       </div>

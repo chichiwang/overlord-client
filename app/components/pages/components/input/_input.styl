@@ -4,11 +4,14 @@
 
 .input
   .label
-    text-align: center
+    padding-left: 20px
+    text-align: left
     font-size: 2em
     line-height: 2.5em
       
   .input-area
+    padding-right: 20px
+    text-align: right
     flex: 2
 
   .key-input
@@ -25,11 +28,11 @@
     .icon-tri-up,
     .icon-tri-down
       position: absolute
+      opacity: 0
       
     .icon-tri-up,
     .icon-tri-down
       font-size: 0.75em
-      animation: blink 1500ms steps(1) infinite
     
     .icon-tri-right
       left: -0.25em
@@ -42,3 +45,20 @@
 
     .key
       padding: 0.25em
+      
+  &.active .key-input
+    .icon-tri-left,
+    .icon-tri-right,
+    .icon-tri-up,
+    .icon-tri-down
+      opacity: 1
+      
+    .icon-tri-up,
+    .icon-tri-down
+      animation: blink 1500ms steps(1) infinite
+      
+@keyframes blink
+  0%
+    opacity: 1
+  50%
+    opacity: 0
