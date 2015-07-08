@@ -6,6 +6,7 @@ KeyStore = require 'util/keypress/store'
 
 # Child views
 Input = require '../input'
+Button = require '../button'
 
 # Static variables
 keyMap = {
@@ -43,7 +44,7 @@ _updateTimer = (val) ->
 
 Boot = React.createClass
   displayName: 'Boot'
-  numInputs: 3
+  numInputs: 4
 
   getInitialState: ->
     {
@@ -69,6 +70,9 @@ Boot = React.createClass
         <Input label="Activation Code" val={ @state.activation } onUpdate={ @updateActivation } active={ @state.activeInput == 1 } />
         <Input label="Deactivation Code" val={ @state.deactivation } onUpdate={ @updateDeactivation } active={ @state.activeInput == 2 } />
         <Input label="Timer(sec)" val={ @state.timer } onUpdate={ @updateTimer } active={ @state.activeInput == 3 } />
+        <div className="save row">
+          <Button text="SAVE" active={ @state.activeInput == 4 } />
+        </div>
       </div>
     </div>
 

@@ -71,7 +71,7 @@ _updateDimensions = ->
   @keyWidth = keyInput.children[0].offsetWidth
   @arrowWidth = React.findDOMNode(@refs.arrowDown).offsetWidth
 
-# Component class definition
+# Input component definition
 Input = React.createClass
   displayName: 'Input'
   valLength: 0

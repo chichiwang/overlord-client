@@ -3,7 +3,7 @@
 # [method] isEmpty
 # Checks if a variable is empty
 hasOwnProperty = Object::hasOwnProperty
-_isEmtpy = (obj) ->
+_isEmpty = (obj) ->
 	if (obj is null) or (typeof obj is 'undefined')
 		return true
 
@@ -128,7 +128,7 @@ _documentReady = (callback, context) ->
 # Bundle helper methods for export
 Helpers =
 	isEmpty: (args...) ->
-		_isEmtpy.apply @, args
+		_isEmpty.apply @, args
 	type: (args...) ->
 		_type.apply @, args
 	

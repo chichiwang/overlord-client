@@ -1,0 +1,32 @@
+// nib is a powerful lib for stylus that provides cross-browser css3 mixins.
+// No more vendor prefixes. http://visionmedia.github.com/nib/
+@import 'nib'
+
+.button
+  position: relative
+  display: inline-block
+  padding: 0.25em 0.5em
+  height: 100%
+  font-size: 2em
+  line-height: @height
+  border: 2px solid $primaryColor
+  border-radius: 5px
+  background-color: #000000
+  
+  .icon-tri-right,
+  .icon-tri-left
+    position: absolute
+    opacity: 0
+    
+  .icon-tri-right
+    left: -0.25em
+    
+  .icon-tri-left
+    right: -0.25em
+    
+  &.active
+    cursor: pointer
+    
+    .icon-tri-right,
+    .icon-tri-left
+      opacity: 1
