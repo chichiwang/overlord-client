@@ -95,8 +95,9 @@ Input = React.createClass
     @keypressHandler = _keyPressed.bind(@)
     KeyStore.on('change', @keypressHandler)
 
-  componentWillUpdate: (newProps) ->
+  componentWillReceiveProps: (newProps) ->
     @valueMap = newProps.val.split('') if newProps.val
+    @setState { position: 1 } unless newProps.active
 
   render: ->
     # console.log 'Input position: ', @state.position

@@ -23,23 +23,42 @@ _classes = ->
 
 _keypressed = (val) ->
   return unless @props.active
-  code = val.lastPressed
-  console.log 'Boot page | Key pressed >> ', keyMap[code]
+  keyCode = val.lastPressed
+  active = @state.activeInput
+  # console.log 'Boot page | Key pressed >> ', keyMap[keyCode]
+
+  if keyMap[keyCode] == 'up'
+    @setState { activeInput: active - 1 } unless active == 1
+  if keyMap[keyCode] == 'down'
+    @setState { activeInput: active + 1 } unless active == @numInputs
 
 _updateActivation = (val) ->
   @setState { activation: val }
 
+_updateDeactivation = (val) ->
+  @setState { deactivation: val }
+
+_updateTimer = (val) ->
+  @setState { timer: val }
+
 Boot = React.createClass
   displayName: 'Boot'
+  numInputs: 3
 
   getInitialState: ->
     {
+      activeInput: 1
       activation: '1234'
+      deactivation: '0000'
+      timer: '0300'
     }
 
   componentWillMount: ->
     @classes = _classes.bind(@)
     @updateActivation = _updateActivation.bind(@)
+    @updateDeactivation = _updateDeactivation.bind(@)
+    @updateTimer = _updateTimer.bind(@)
+
     @keypressed = _keypressed.bind(@)
     KeyStore.on('change', @keypressed)
 
@@ -47,7 +66,9 @@ Boot = React.createClass
     <div className={ @classes() }>
       <div className="title">Configuration</div>
       <div className="pane">
-        <Input label="Activation Code" val={ @state.activation } onUpdate={ @updateActivation } active={ true } />
+        <Input label="Activation Code" val={ @state.activation } onUpdate={ @updateActivation } active={ @state.activeInput == 1 } />
+        <Input label="Deactivation Code" val={ @state.deactivation } onUpdate={ @updateDeactivation } active={ @state.activeInput == 2 } />
+        <Input label="Timer(sec)" val={ @state.timer } onUpdate={ @updateTimer } active={ @state.activeInput == 3 } />
       </div>
     </div>
 
