@@ -37,7 +37,7 @@ Boot = React.createClass
     <div className={ @_classes() }>
       <div className="title">Configuration</div>
       <div className="pane">
-        <Input label="Activation Code" />
+        <Input label="Activation Code" val="1234" active={ true } />
       </div>
     </div>
 
