@@ -5,6 +5,7 @@ cx = require 'util/cx'
 
 # Static variables
 keyMap = {
+  8: 'backspace',
   37: 'left', 39: 'right',
   48: '0', 49: '1', 50: '2', 51: '3',
   52: '4', 53: '5', 54: '6', 55: '7',
@@ -52,9 +53,8 @@ _decrementCursor = ->
 _keyPressed = (e) ->
   return unless @props.active
   keyCode = e.keyCode
-  # console.log 'Input | Key pressed >> ', @props.label, @state.position
 
-  _decrementCursor.call(@) if keyMap[keyCode] == 'left'
+  _decrementCursor.call(@) if keyMap[keyCode] == 'left' || keyMap[keyCode] == 'backspace'
   _incrementCursor.call(@) if keyMap[keyCode] == 'right'
 
   if _keyIsNumeral(keyCode)
@@ -122,7 +122,6 @@ Input = React.createClass
       @_unbindKeypress()
 
   render: ->
-    # console.log 'Input position: ', @state.position
     <div className={ _classes.call(@) }>
       <div className="label">
         { @props.label }

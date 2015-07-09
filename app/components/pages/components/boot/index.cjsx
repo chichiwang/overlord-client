@@ -11,6 +11,10 @@ Button = require '../button'
 keyMap = {
   38: 'up'
   40: 'down'
+  block: {
+    8: 'backspace'
+    9: 'tab'
+  }
 }
 
 # Static methods
@@ -57,10 +61,16 @@ _focusTimer = ->
 _focusSave = ->
   @setState { activeInput: 4 }
 
+_keyBlock = (e) ->
+  return unless @props.active
+  keyCode = e.keyCode
+
+  @nextInput() if keyMap.block[keyCode] == 'tab'
+  e.preventDefault() if keyMap.block[keyCode]
+
 _keyPressed = (e) ->
   return unless @props.active
   keyCode = e.keyCode
-  # console.log 'Boot page | Key pressed >> ', keyMap[keyCode]
 
   _prevInput.call(@) if keyMap[keyCode] == 'up'
   _nextInput.call(@) if keyMap[keyCode] == 'down'
@@ -119,11 +129,13 @@ Boot = React.createClass
     return false if @keyListenerBound
     @keyListenerBound = true
     document.addEventListener('keyup', @keyPressed);
+    document.addEventListener('keydown', @keyBlock);
 
   _unbindKeypress: ->
     return false unless @keyListenerBound
     @keyListenerBound = false
     document.removeEventListener('keyup', @keyPressed);
+    document.removeEventListener('keydown', @keyBlock);
 
   getInitialState: ->
     {
@@ -149,6 +161,7 @@ Boot = React.createClass
     @prevInput = _prevInput.bind(@)
 
     @keyPressed = _keyPressed.bind(@)
+    @keyBlock = _keyBlock.bind(@)
 
   componentWillReceiveProps: (newProps) ->
     if newProps.active
