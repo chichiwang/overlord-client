@@ -2,7 +2,6 @@
 'use strict'
 
 cx = require 'util/cx'
-KeyStore = require 'util/keypress/store'
 
 # Static variables
 keyMap = {
@@ -28,12 +27,6 @@ _cursorIsAtEnd = ->
 _cursorIsAtStart = ->
   @state.position == 0
 
-_cursorLeft = ->
-  @setState { position: @state.position - 1 } unless _cursorIsAtStart.call(@)
-
-_cursorRight = ->
-  @setState { position: @state.position + 1 } unless _cursorIsAtEnd.call(@)
-
 _cursorStyles = ->
   modifier = @state.position
   offset = @leftOffset + (@keyWidth / 2) - (@arrowWidth / 2)
@@ -42,17 +35,23 @@ _cursorStyles = ->
 
 _incrementCursor = ->
   if _cursorIsAtEnd.call(@)
-    @setState { position: 0 }
+    @props.onNext?()
   else
     @setState { position: @state.position + 1 }
 
-_keyPressed = (val) ->
-  return unless @props.active
-  keyCode = val.lastPressed
-  # console.log 'Input | Key pressed >> ', val.lastPressed
+_decrementCursor = ->
+  if _cursorIsAtStart.call(@)
+    @props.onPrev?()
+  else
+    @setState { position: @state.position - 1 }
 
-  _cursorLeft.call(@) if keyMap[keyCode] == 'left'
-  _cursorRight.call(@) if keyMap[keyCode] == 'right'
+_keyPressed = (e) ->
+  return unless @props.active
+  keyCode = e.keyCode
+  # console.log 'Input | Key pressed >> ', @props.label, @state.position
+
+  _decrementCursor.call(@) if keyMap[keyCode] == 'left'
+  _incrementCursor.call(@) if keyMap[keyCode] == 'right'
 
   if _keyIsNumeral(keyCode)
     @valueMap[@state.position] = keyMap[keyCode]
@@ -87,27 +86,39 @@ Input = React.createClass
   leftOffset: 0
   arrowWidth: 0
 
+  keyListenerBound: false
+  keyPressed: undefined
+
+  _bindKeypress: ->
+    return false if @keyListenerBound
+    @keyListenerBound = true
+    document.addEventListener('keyup', @keyPressed)
+
+  _unbindKeypress: ->
+    return false unless @keyListenerBound
+    @keyListenerBound = false
+    document.removeEventListener('keyup', @keyPressed)
+
   getInitialState: ->
     { position: 0 }
 
   componentWillMount: ->
-    @classes = _classes.bind(@)
-    @cursorStyles = _cursorStyles.bind(@)
-    @updateDimensions = _updateDimensions.bind(@)
-
     @valLength = @props.val.length if @props.val
     @valueMap = @props.val.split('') if @props.val
-
-    @keypressHandler = _keyPressed.bind(@)
-    KeyStore.on('change', @keypressHandler)
+    @keyPressed = _keyPressed.bind(@)
 
   componentWillReceiveProps: (newProps) ->
     @valueMap = newProps.val.split('') if newProps.val
-    @setState { position: 0 } unless newProps.active
+
+    if newProps.active
+      @_bindKeypress()
+    else
+      @setState { position: 0 }
+      @_unbindKeypress()
 
   render: ->
     # console.log 'Input position: ', @state.position
-    <div className={ @classes() } >
+    <div className={ _classes.call(@) } >
       <div className="label">
         { @props.label }
       </div>
@@ -116,16 +127,13 @@ Input = React.createClass
           { _makeCharacters(@props.val) }
           <span className="icon-tri-right" />
           <span className="icon-tri-left" />
-          <span className="icon-tri-down" ref="arrowDown" style={ @cursorStyles() } />
-          <span className="icon-tri-up" style={ @cursorStyles() } />
+          <span className="icon-tri-down" ref="arrowDown" style={ _cursorStyles.call(@) } />
+          <span className="icon-tri-up" style={ _cursorStyles.call(@) } />
         </div>
       </div>
     </div>
 
   componentDidUpdate: ->
-    @updateDimensions()
-
-  componentWillUnmount: ->
-    Keystore.off('change', @keypressHandler)
+    _updateDimensions.call(@)
 
 module.exports = Input

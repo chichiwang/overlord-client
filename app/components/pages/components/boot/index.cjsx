@@ -2,7 +2,6 @@
 'use strict'
 
 cx = require 'util/cx'
-KeyStore = require 'util/keypress/store'
 
 # Child views
 Input = require '../input'
@@ -15,6 +14,16 @@ keyMap = {
 }
 
 # Static methods
+_activationProps = ->
+  {
+    label: "Activation Code"
+    val: @state.activation
+    onUpdate: @updateActivation
+    onNext: @nextInput
+    onPrev: @prevInput
+    active: @state.activeInput == 1
+  }
+
 _classes = ->
   cx({
     boot: true
@@ -22,16 +31,47 @@ _classes = ->
     active: @props.active
   })
 
-_keypressed = (val) ->
+_deactivationProps = ->
+  {
+    label: "Deactivation Code"
+    val: @state.deactivation
+    onUpdate: @updateDeactivation
+    onNext: @nextInput
+    onPrev: @prevInput
+    active: @state.activeInput == 2
+  }
+
+_keyPressed = (e) ->
   return unless @props.active
-  keyCode = val.lastPressed
-  active = @state.activeInput
+  keyCode = e.keyCode
   # console.log 'Boot page | Key pressed >> ', keyMap[keyCode]
 
-  if keyMap[keyCode] == 'up'
-    @setState { activeInput: active - 1 } unless active == 1
-  if keyMap[keyCode] == 'down'
-    @setState { activeInput: active + 1 } unless active == @numInputs
+  _prevInput.call(@) if keyMap[keyCode] == 'up'
+  _nextInput.call(@) if keyMap[keyCode] == 'down'
+
+_nextInput = ->
+  active = @state.activeInput
+  @setState { activeInput: active + 1 } unless active == @numInputs
+
+_prevInput = ->
+  active = @state.activeInput
+  @setState { activeInput: active - 1 } unless active == 1
+
+_saveProps = ->
+  {
+    text: "SAVE"
+    active: @state.activeInput == 4
+  }
+
+_timerProps = ->
+  {
+    label: "Timer Duration(sec)"
+    val: @state.timer
+    onUpdate: @updateTimer
+    onNext: @nextInput
+    onPrev: @prevInput
+    active: @state.activeInput == 3
+  }
 
 _updateActivation = (val) ->
   @setState { activation: val }
@@ -42,9 +82,20 @@ _updateDeactivation = (val) ->
 _updateTimer = (val) ->
   @setState { timer: val }
 
+# Boot component definition
 Boot = React.createClass
   displayName: 'Boot'
   numInputs: 4
+
+  _bindKeypress: ->
+    return false if @keyListenerBound
+    @keyListenerBound = true
+    document.addEventListener('keyup', @keyPressed);
+
+  _unbindKeypress: ->
+    return false unless @keyListenerBound
+    @keyListenerBound = false
+    document.removeEventListener('keyup', @keyPressed);
 
   getInitialState: ->
     {
@@ -55,28 +106,33 @@ Boot = React.createClass
     }
 
   componentWillMount: ->
-    @classes = _classes.bind(@)
     @updateActivation = _updateActivation.bind(@)
     @updateDeactivation = _updateDeactivation.bind(@)
     @updateTimer = _updateTimer.bind(@)
 
-    @keypressed = _keypressed.bind(@)
-    KeyStore.on('change', @keypressed)
+    @nextInput = _nextInput.bind(@)
+    @prevInput = _prevInput.bind(@)
+
+    @keyPressed = _keyPressed.bind(@)
+
+  componentWillReceiveProps: (newProps) ->
+    if newProps.active
+      @_bindKeypress()
+    else
+      @_unbindKeypress()
+      @setState { activeInput: 1 }
 
   render: ->
-    <div className={ @classes() }>
+    <div className={ _classes.call(@) }>
       <div className="title">Configuration</div>
       <div className="pane">
-        <Input label="Activation Code" val={ @state.activation } onUpdate={ @updateActivation } active={ @state.activeInput == 1 } />
-        <Input label="Deactivation Code" val={ @state.deactivation } onUpdate={ @updateDeactivation } active={ @state.activeInput == 2 } />
-        <Input label="Timer(sec)" val={ @state.timer } onUpdate={ @updateTimer } active={ @state.activeInput == 3 } />
+        <Input {..._activationProps.call(@)} />
+        <Input {..._deactivationProps.call(@)} />
+        <Input {..._timerProps.call(@)} />
         <div className="save row">
-          <Button text="SAVE" active={ @state.activeInput == 4 } />
+          <Button {..._saveProps.call(@)} />
         </div>
       </div>
     </div>
-
-  componentWillUnmount: ->
-    KeyStore.off('change', @keypressed)
 
 module.exports = Boot

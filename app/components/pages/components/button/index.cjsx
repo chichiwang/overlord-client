@@ -2,7 +2,6 @@
 'use strict'
 
 cx = require 'util/cx'
-KeyStore = require 'util/keypress/store'
 
 _classes = ->
   cx({

@@ -2,7 +2,6 @@
 'use strict'
 
 cx = require 'util/cx'
-kp = require 'util/keypress'
 
 # Child views
 Access = require './components/access'
@@ -26,9 +25,6 @@ Pages = React.createClass
       'access': @props.page == 'access'
     })
 
-  componentWillMount: ->
-    kp.on()
-
   render: ->
     <div id="Pages" className={ @_classes() } style={ @_styles() }>
       <div className="wrapper">
@@ -39,8 +35,5 @@ Pages = React.createClass
         </div>
       </div>
     </div>
-
-  componentWillUnmount: ->
-    kp.off()
 
 module.exports = Pages

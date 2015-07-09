@@ -1,2 +1,0 @@
-module.exports =
-  SET_LAST_PRESSED: 'KEYPRESS:SET_LAST_PRESSED'
