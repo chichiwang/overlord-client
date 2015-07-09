@@ -19,6 +19,7 @@ _classes = ->
     input: true
     row: true
     active: @props.active
+    invalid: @props.invalid
   })
 
 _clicked = ->
@@ -122,13 +123,14 @@ Input = React.createClass
 
   render: ->
     # console.log 'Input position: ', @state.position
-    <div className={ _classes.call(@) } onClick={ @clicked }>
+    <div className={ _classes.call(@) }>
       <div className="label">
         { @props.label }
       </div>
       <div className="input-area">
-        <div className="key-input" ref="keyInput">
+        <div className="key-input" onClick={ @clicked } ref="keyInput">
           { _makeCharacters(@props.val) }
+          <span className="icon-warning" />
           <span className="icon-tri-right" />
           <span className="icon-tri-left" />
           <span className="icon-tri-down" ref="arrowDown" style={ _cursorStyles.call(@) } />

@@ -14,10 +14,11 @@ _classes = ->
   cx({
     button: true
     active: @props.active
+    locked: @props.locked
   })
 
 _clicked = ->
-  @props.onClick?()
+  @props.onClick?() unless @props.locked
 
 _keyPressed = (e) ->
   keyCode = e.keyCode
@@ -52,9 +53,10 @@ Button = React.createClass
 
   render: ->
     text = @props.text || "Button"
+    text = @props.lockedText || "Locked!" if @props.locked
 
     <div className={ _classes.call(@) } onClick={ @clicked } >
-      { text }
+      <span className="copy">{ text }</span>
       <span className="icon-tri-right" />
       <span className="icon-tri-left" />
     </div>

@@ -23,6 +23,7 @@ _activationProps = ->
     onPrev: @prevInput
     onClick: @focus.activation
     active: @state.activeInput == 1
+    invalid: @state.activation == @state.deactivation
   }
 
 _classes = ->
@@ -41,6 +42,7 @@ _deactivationProps = ->
     onPrev: @prevInput
     onClick: @focus.deactivation
     active: @state.activeInput == 2
+    invalid: @state.activation == @state.deactivation
   }
 
 _focusActivation = ->
@@ -78,6 +80,8 @@ _saveProps = ->
     onNext: @nextInput
     onPrev: @prevInput
     onClick: @sendConfig
+    locked: @state.activation == @state.deactivation
+    lockedText: "Codes can not be the same!"
   }
 
 _sendConfig = ->

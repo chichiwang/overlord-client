@@ -27,6 +27,11 @@
     user-select: none
     cursor: pointer
     
+    .icon-warning
+      position: absolute
+      left: -1.8em
+      opacity: 0
+    
     .icon-tri-left,
     .icon-tri-right,
     .icon-tri-up,
@@ -63,8 +68,6 @@
     .icon-tri-down
       animation: blink 1500ms steps(1) infinite
       
-@keyframes blink
-  0%
+&.invalid .key-input
+  .icon-warning
     opacity: 1
-  50%
-    opacity: 0
