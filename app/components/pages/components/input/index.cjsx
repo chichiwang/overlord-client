@@ -21,6 +21,9 @@ _classes = ->
     active: @props.active
   })
 
+_clicked = ->
+  @props.onClick?()
+
 _cursorIsAtEnd = ->
   @state.position == @valLength - 1
 
@@ -105,6 +108,7 @@ Input = React.createClass
   componentWillMount: ->
     @valLength = @props.val.length if @props.val
     @valueMap = @props.val.split('') if @props.val
+    @clicked = _clicked.bind(@)
     @keyPressed = _keyPressed.bind(@)
 
   componentWillReceiveProps: (newProps) ->
@@ -118,7 +122,7 @@ Input = React.createClass
 
   render: ->
     # console.log 'Input position: ', @state.position
-    <div className={ _classes.call(@) } >
+    <div className={ _classes.call(@) } onClick={ @clicked }>
       <div className="label">
         { @props.label }
       </div>

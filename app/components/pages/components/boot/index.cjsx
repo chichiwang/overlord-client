@@ -21,6 +21,7 @@ _activationProps = ->
     onUpdate: @updateActivation
     onNext: @nextInput
     onPrev: @prevInput
+    onClick: @focus.activation
     active: @state.activeInput == 1
   }
 
@@ -38,8 +39,21 @@ _deactivationProps = ->
     onUpdate: @updateDeactivation
     onNext: @nextInput
     onPrev: @prevInput
+    onClick: @focus.deactivation
     active: @state.activeInput == 2
   }
+
+_focusActivation = ->
+  @setState { activeInput: 1 }
+
+_focusDeactivation = ->
+  @setState { activeInput: 2 }
+
+_focusTimer = ->
+  @setState { activeInput: 3 }
+
+_focusSave = ->
+  @setState { activeInput: 4 }
 
 _keyPressed = (e) ->
   return unless @props.active
@@ -61,7 +75,14 @@ _saveProps = ->
   {
     text: "SAVE"
     active: @state.activeInput == 4
+    onNext: @nextInput
+    onPrev: @prevInput
+    onClick: @sendConfig
   }
+
+_sendConfig = ->
+  @focus.save()
+  console.log '_sendConfig'
 
 _timerProps = ->
   {
@@ -70,6 +91,7 @@ _timerProps = ->
     onUpdate: @updateTimer
     onNext: @nextInput
     onPrev: @prevInput
+    onClick: @focus.timer
     active: @state.activeInput == 3
   }
 
@@ -86,6 +108,8 @@ _updateTimer = (val) ->
 Boot = React.createClass
   displayName: 'Boot'
   numInputs: 4
+
+  focus: undefined
 
   _bindKeypress: ->
     return false if @keyListenerBound
@@ -109,6 +133,13 @@ Boot = React.createClass
     @updateActivation = _updateActivation.bind(@)
     @updateDeactivation = _updateDeactivation.bind(@)
     @updateTimer = _updateTimer.bind(@)
+    @sendConfig = _sendConfig.bind(@)
+
+    @focus = {}
+    @focus.activation = _focusActivation.bind(@)
+    @focus.deactivation = _focusDeactivation.bind(@)
+    @focus.timer = _focusTimer.bind(@)
+    @focus.save = _focusSave.bind(@)
 
     @nextInput = _nextInput.bind(@)
     @prevInput = _prevInput.bind(@)
