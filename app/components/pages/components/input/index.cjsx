@@ -22,41 +22,53 @@ _classes = ->
     active: @props.active
   })
 
+_cursorIsAtEnd = ->
+  @state.position == @valLength - 1
+
+_cursorIsAtStart = ->
+  @state.position == 0
+
+_cursorLeft = ->
+  @setState { position: @state.position - 1 } unless _cursorIsAtStart.call(@)
+
+_cursorRight = ->
+  @setState { position: @state.position + 1 } unless _cursorIsAtEnd.call(@)
+
 _cursorStyles = ->
-  modifier = @state.position - 1
+  modifier = @state.position
   offset = @leftOffset + (@keyWidth / 2) - (@arrowWidth / 2)
   left = offset + (@keyWidth * modifier)
   { left: left + 'px' }
+
+_incrementCursor = ->
+  if _cursorIsAtEnd.call(@)
+    @setState { position: 0 }
+  else
+    @setState { position: @state.position + 1 }
 
 _keyPressed = (val) ->
   return unless @props.active
   keyCode = val.lastPressed
   # console.log 'Input | Key pressed >> ', val.lastPressed
 
-  if keyMap[keyCode] == 'left'
-    @setState { position: @state.position - 1 } unless @state.position == 1
-  if keyMap[keyCode] == 'right'
-    @setState { position: @state.position + 1 } unless @state.position == @valLength
+  _cursorLeft.call(@) if keyMap[keyCode] == 'left'
+  _cursorRight.call(@) if keyMap[keyCode] == 'right'
 
   if _keyIsNumeral(keyCode)
-    @valueMap[@state.position - 1] = keyMap[keyCode]
-
+    @valueMap[@state.position] = keyMap[keyCode]
     @props.onUpdate(@valueMap.join(''))
-
-    if @state.position == @valLength
-      @setState { position: 1 }
-    else
-      @setState { position: @state.position + 1 }
+    _incrementCursor.call(@)
+    
 
 _keyIsNumeral = (keyCode) ->
   (keyCode >= 48 && keyCode <= 57)  || (keyCode >= 96 && keyCode <= 105)
 
-_generateKeys = (val) ->
+_makeCharacters = (val) ->
   keys = []
   return keys unless val && val.length
   chars = val.split('')
   for char in chars
-    keys.push <span className="key">{ char }</span>
+    keys.push <span className="chara">{ char }</span>
   keys
 
 _updateDimensions = ->
@@ -76,7 +88,7 @@ Input = React.createClass
   arrowWidth: 0
 
   getInitialState: ->
-    { position: 1 }
+    { position: 0 }
 
   componentWillMount: ->
     @classes = _classes.bind(@)
@@ -91,7 +103,7 @@ Input = React.createClass
 
   componentWillReceiveProps: (newProps) ->
     @valueMap = newProps.val.split('') if newProps.val
-    @setState { position: 1 } unless newProps.active
+    @setState { position: 0 } unless newProps.active
 
   render: ->
     # console.log 'Input position: ', @state.position
@@ -101,7 +113,7 @@ Input = React.createClass
       </div>
       <div className="input-area">
         <div className="key-input" ref="keyInput">
-          { _generateKeys(@props.val) }
+          { _makeCharacters(@props.val) }
           <span className="icon-tri-right" />
           <span className="icon-tri-left" />
           <span className="icon-tri-down" ref="arrowDown" style={ @cursorStyles() } />
