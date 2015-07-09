@@ -6,18 +6,12 @@ KeyStore = require 'util/keypress/store'
 
 # Static variables
 keyMap = {
-  37: 'left'
-  39: 'right'
-  48: '0'
-  49: '1'
-  50: '2'
-  51: '3'
-  52: '4'
-  53: '5'
-  54: '6'
-  55: '7'
-  56: '8'
-  57: '9'
+  37: 'left', 39: 'right',
+  48: '0', 49: '1', 50: '2', 51: '3',
+  52: '4', 53: '5', 54: '6', 55: '7',
+  56: '8', 57: '9', 96: '0', 97: '1',
+  98: '2', 99: '3', 100: '4', 101: '5'
+  102: '6', 103: '7', 104: '8', 105: '9'
 }
 
 # Static methods
@@ -55,7 +49,7 @@ _keyPressed = (val) ->
       @setState { position: @state.position + 1 }
 
 _keyIsNumeral = (keyCode) ->
-  keyCode > 47 && keyCode < 58
+  (keyCode >= 48 && keyCode <= 57)  || (keyCode >= 96 && keyCode <= 105)
 
 _generateKeys = (val) ->
   keys = []
