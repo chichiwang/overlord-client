@@ -29,7 +29,7 @@ Pages = React.createClass
     <div id="Pages" className={ @_classes() } style={ @_styles() }>
       <div className="wrapper">
         <div className="page-wrapper" style={ @_wrapper_styles() }>
-          <Boot active={ @props.page == 'boot' } />
+          <Boot active={ @props.page == 'boot' } bomb={ @props.bomb } />
           <Code active={ @props.page == 'code' } />
           <Access active={ @props.page == 'access' } />
         </div>

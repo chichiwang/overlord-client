@@ -60,7 +60,7 @@ Stage = React.createClass
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
         <Menu height={ stageHeight } bombState={ bombState } activeItem={ activeItem } />
-        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } page={ activeItem } />
+        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } page={ activeItem } bomb={ @props.bomb } />
       </div>
     </div>
 

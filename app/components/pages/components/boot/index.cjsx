@@ -2,6 +2,7 @@
 'use strict'
 
 cx = require 'util/cx'
+ws = require 'util/websocket'
 
 # Child views
 Input = require '../input'
@@ -79,6 +80,9 @@ _nextInput = ->
   active = @state.activeInput
   @setState { activeInput: active + 1 } unless active == @numInputs
 
+_padFourDigits = (num) ->
+  ("0000" + num).slice(-4)
+
 _prevInput = ->
   active = @state.activeInput
   @setState { activeInput: active - 1 } unless active == 1
@@ -96,7 +100,12 @@ _saveProps = ->
 
 _sendConfig = ->
   @focus.save()
-  console.log '_sendConfig'
+  # ws.sendConfigure(@state.activation, @state.deactivation, @state.timer)
+  console.log '_sendConfig', {
+    activation: @state.activation
+    deactivation: @state.deactivation
+    timer: @state.timer
+  }
 
 _timerProps = ->
   {
@@ -137,12 +146,31 @@ Boot = React.createClass
     document.removeEventListener('keyup', @keyPressed);
     document.removeEventListener('keydown', @keyBlock);
 
+  _initState: (props)->
+    return false if @stateInit
+    @stateInit = true
+    @setState {
+      activation: props.bomb.activation_code
+      deactivation: props.bomb.deactivation_code
+      timer: _padFourDigits(props.bomb.timer_duration)
+    }
+
+  _resetState: ->
+    return false unless @stateInit
+    @stateInit = false
+    @setState {
+      activeInput: 1
+      activation: undefined
+      deactivation: undefined
+      timer: undefined
+    }
+
   getInitialState: ->
     {
       activeInput: 1
-      activation: '1234'
-      deactivation: '0000'
-      timer: '0300'
+      activation: undefined
+      deactivation: undefined
+      timer: undefined
     }
 
   componentWillMount: ->
@@ -166,9 +194,10 @@ Boot = React.createClass
   componentWillReceiveProps: (newProps) ->
     if newProps.active
       @_bindKeypress()
+      @_initState(newProps) if newProps.bomb
     else
       @_unbindKeypress()
-      @setState { activeInput: 1 }
+      @_resetState()
 
   render: ->
     <div className={ _classes.call(@) }>

@@ -107,12 +107,12 @@ Input = React.createClass
     { position: 0 }
 
   componentWillMount: ->
-    @valLength = @props.val.length if @props.val
     @valueMap = @props.val.split('') if @props.val
     @clicked = _clicked.bind(@)
     @keyPressed = _keyPressed.bind(@)
 
   componentWillReceiveProps: (newProps) ->
+    @valLength = newProps.val.length if newProps.val
     @valueMap = newProps.val.split('') if newProps.val
 
     if newProps.active
