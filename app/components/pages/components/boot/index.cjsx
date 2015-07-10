@@ -101,11 +101,7 @@ _saveProps = ->
 _sendConfig = ->
   @focus.save()
   ws.sendConfigure(@state.activation, @state.deactivation, @state.timer)
-  # console.log '_sendConfig', {
-  #   activation: @state.activation
-  #   deactivation: @state.deactivation
-  #   timer: @state.timer
-  # }
+  # Push user to the next screen
 
 _timerProps = ->
   {
@@ -194,10 +190,10 @@ Boot = React.createClass
   componentWillReceiveProps: (newProps) ->
     if newProps.active
       @_bindKeypress()
+      @_resetState()
       @_initState(newProps) if newProps.bomb
     else
       @_unbindKeypress()
-      @_resetState()
 
   render: ->
     <div className={ _classes.call(@) }>
