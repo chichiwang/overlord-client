@@ -52,13 +52,7 @@ SocketClass = class SocketClass
 
     send: (msg) ->
       throw new Error "Websocket: Can not send message - not connected!" unless @_socket
-      
-      message =
-        type: 'message'
-        value: msg
-        time: Date.now()
-
-      @_socket.send(JSON.stringify(message))
+      @_socket.send(JSON.stringify(msg))
 
     disconnect: ->
       @_socket.close()
