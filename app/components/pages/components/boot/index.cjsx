@@ -100,12 +100,12 @@ _saveProps = ->
 
 _sendConfig = ->
   @focus.save()
-  # ws.sendConfigure(@state.activation, @state.deactivation, @state.timer)
-  console.log '_sendConfig', {
-    activation: @state.activation
-    deactivation: @state.deactivation
-    timer: @state.timer
-  }
+  ws.sendConfigure(@state.activation, @state.deactivation, @state.timer)
+  # console.log '_sendConfig', {
+  #   activation: @state.activation
+  #   deactivation: @state.deactivation
+  #   timer: @state.timer
+  # }
 
 _timerProps = ->
   {

@@ -48,7 +48,7 @@ SocketClass = class SocketClass
         command: "configure"
         params: [activation, deactivation, timer]
       }
-      send(msg)
+      @send(msg)
 
     send: (msg) ->
       throw new Error "Websocket: Can not send message - not connected!" unless @_socket
