@@ -13,7 +13,12 @@ Pages = require 'components/pages'
 # Static variables
 stageHeight = 0
 bombStateHistory = [undefined]
-switchActive = { boot: [undefined] }
+pageMap = {
+  boot: ['boot']
+  code: ['inactive', 'active']
+  detonated: ['detonated']
+  defused: ['defused']
+}
 
 # Static methods
 _getStageHeight = ->
@@ -31,10 +36,15 @@ _stageStyles = ->
   })
 
 _getActiveMenuItem = (bombState, selectedMenu) ->
-  if bombState of switchActive && bombStateHistory[0] in switchActive[bombState]
-    bombState
+  console.log 'Stage >> bombState: ', bombState
+  console.log 'Stage >> selectedMenu', selectedMenu
+  console.log 'Stage >> bombStateHistory', bombStateHistory
+
+  if bombStateHistory[0] == undefined
+    for key, page of pageMap
+      return key if bombState in page
   else
-    selectedMenu
+    bombState
 
 _updateBombStateHistory = (bombState) ->
   if bombStateHistory.length == 1
