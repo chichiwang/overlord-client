@@ -11,13 +11,23 @@ Menu = require 'components/menu'
 Pages = require 'components/pages'
 
 # Static variables
+currPage = undefined
 stageHeight = 0
 bombStateHistory = [undefined]
+clientUpdated = undefined
+
 pageMap = {
   boot: ['boot']
   code: ['inactive', 'active']
   detonated: ['detonated']
   defused: ['defused']
+}
+
+updateMap = {
+  inactive: {
+    from: 'boot'
+    to: 'code'
+  }
 }
 
 # Static methods
@@ -35,16 +45,32 @@ _stageStyles = ->
     'hide': @props.socket != 'connected' && !@props.bomb
   })
 
-_getActiveMenuItem = (bombState, selectedMenu) ->
-  console.log 'Stage >> bombState: ', bombState
-  console.log 'Stage >> selectedMenu', selectedMenu
-  console.log 'Stage >> bombStateHistory', bombStateHistory
+# Set up method _page to track current active page - call _getActivePage
+_page = (bomb, selectedMenu) ->
+  currPage = _getActivePage(bomb, selectedMenu)
+  currPage
 
-  if bombStateHistory[0] == undefined
-    for key, page of pageMap
-      return key if bombState in page
+_getActivePage = (bomb, selectedMenu) ->
+  # console.log 'Stage >> bomb: ', bomb
+  # console.log 'Stage >> selectedMenu', selectedMenu
+  # console.log 'Stage >> bombStateHistory', bombStateHistory
+
+  clientUpdated = bomb && bomb.client_updated
+  initialPage = bombStateHistory[0] == undefined && !selectedMenu && !clientUpdated
+
+  if initialPage
+    page = _getPageFromBombState(bomb?.state)
+  else if clientUpdated
+    page = updateMap[bomb?.state].to
+    # clientUpdated = undefined
   else
-    bombState
+    page = selectedMenu || updateMap[bomb.state].from
+
+  page
+
+_getPageFromBombState = (bombState) ->
+  for key, page of pageMap
+    return key if bombState in page
 
 _updateBombStateHistory = (bombState) ->
   if bombStateHistory.length == 1
@@ -62,15 +88,16 @@ Stage = React.createClass
 
   render: ->
     menuState = @state.menu
-    bombState = @props.bomb.state if @props.bomb
+    bomb = @props.bomb
 
-    _updateBombStateHistory(bombState)
-    activeItem = _getActiveMenuItem(bombState, menuState.selectedItem)
+    _updateBombStateHistory(bomb?.state)
+    activePage = _page(bomb, menuState.selectedItem)
+    activeMenu = menuState.selectedItem || activePage
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
-        <Menu height={ stageHeight } bombState={ bombState } activeItem={ activeItem } />
-        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } page={ activeItem } bomb={ @props.bomb } />
+        <Menu height={ stageHeight } bombState={ bomb?.state } activeItem={ activeMenu } />
+        <Pages height={ stageHeight } menuOpen={ menuState.menuOpen } page={ activePage } bomb={ bomb } />
       </div>
     </div>
 
