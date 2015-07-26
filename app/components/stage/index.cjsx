@@ -69,7 +69,6 @@ _page = (socket, menu) ->
   currPage
 
 _activeMenu = (activePage) ->
-  # console.log 'menuState', menuState, 'activePage', activePage
   for menu, pageList of menuMap
     return menu if activePage in pageList
 

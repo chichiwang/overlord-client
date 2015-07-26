@@ -9,6 +9,7 @@ Input = require '../input'
 Button = require '../button'
 
 # Static variables
+currState = 'inactive'
 keyMap = {
   38: 'up'
   40: 'down'
@@ -190,10 +191,15 @@ Boot = React.createClass
   componentWillReceiveProps: (newProps) ->
     if newProps.active
       @_bindKeypress()
-      @_resetState()
-      @_initState(newProps) if newProps.bomb
     else
       @_unbindKeypress()
+
+    if newProps.active && newProps.bomb && currState == 'inactive'
+      @_resetState()
+      @_initState(newProps)
+      currState = 'active'
+    else if !newProps.active
+      currState = 'inactive'
 
   render: ->
     <div className={ _classes.call(@) }>
