@@ -10,6 +10,7 @@ setFocused = (val) ->
   @value.focusedItem = val
 setSelected = (val) ->
   @value.selectedItem = val
+  @value.lastUpdated = new Date()
 setMenuOpen = (val) ->
   @value.menuOpen = val
 
@@ -19,6 +20,7 @@ MenuStore = new StoreClass
   initial:
     focusedItem: undefined
     selectedItem: undefined
+    lastUpdated: new Date()
     menuOpen: false
 
 # Register handlers to store

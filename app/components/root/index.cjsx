@@ -57,7 +57,7 @@ Root = React.createClass
 
 		<div id="Root" style={@styles()}>
 			<Header initialized={ root.initialized } socket={ socket.status } />
-			<Stage socket={ socket.status } bomb={ socket.message } />
+			<Stage socket={ socket } />
 			<ScreenOverlay width={ site.width } height={ site.height } />
 		</div>
 

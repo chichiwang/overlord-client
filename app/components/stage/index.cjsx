@@ -42,31 +42,28 @@ _wrapperStyles = ->
 
 _stageStyles = ->
   cx({
-    'hide': @props.socket != 'connected' && !@props.bomb
+    'hide': @props.socket.status != 'connected' && !@props.socket.message
   })
 
 # Set up method _page to track current active page - call _getActivePage
-_page = (bomb, selectedMenu) ->
-  currPage = _getActivePage(bomb, selectedMenu)
-  currPage
-
-_getActivePage = (bomb, selectedMenu) ->
-  # console.log 'Stage >> bomb: ', bomb
-  # console.log 'Stage >> selectedMenu', selectedMenu
-  # console.log 'Stage >> bombStateHistory', bombStateHistory
-
-  clientUpdated = bomb && bomb.client_updated
+_page = (socket, menu) ->
+  selectedMenu = menu.selectedItem
+  bomb = socket.message
+  clientUpdated = bomb?.client_updated
   initialPage = bombStateHistory[0] == undefined && !selectedMenu && !clientUpdated
 
   if initialPage
-    page = _getPageFromBombState(bomb?.state)
-  else if clientUpdated
-    page = updateMap[bomb?.state].to
-    # clientUpdated = undefined
+    currPage = _getPageFromBombState(bomb?.state)
+  else if clientUpdated && socket.lastUpdated > menu.lastUpdated
+    currPage = updateMap[bomb?.state].to
   else
-    page = selectedMenu || updateMap[bomb.state].from
+    currPage = selectedMenu || updateMap[bomb.state].from
 
-  page
+  currPage
+
+_activeMenu = (menuState, activePage) ->
+  console.log 'menuState', menuState, 'activePage', activePage
+  menuState.selectedItem || activePage
 
 _getPageFromBombState = (bombState) ->
   for key, page of pageMap
@@ -88,11 +85,11 @@ Stage = React.createClass
 
   render: ->
     menuState = @state.menu
-    bomb = @props.bomb
+    bomb = @props.socket.message
 
     _updateBombStateHistory(bomb?.state)
-    activePage = _page(bomb, menuState.selectedItem)
-    activeMenu = menuState.selectedItem || activePage
+    activePage = _page(@props.socket, menuState)
+    activeMenu = _activeMenu(menuState, activePage)
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>

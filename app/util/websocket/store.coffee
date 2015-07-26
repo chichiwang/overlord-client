@@ -10,6 +10,7 @@ setStatus = (val) ->
   @value.status = val
 setMessage = (val) ->
   @value.message = val
+  @value.lastUpdated = new Date()
 
 # Instantiate store class
 SocketStore = new StoreClass
@@ -17,6 +18,7 @@ SocketStore = new StoreClass
   initial:
     status: Const.INITIAL
     message: undefined
+    lastUpdated: new Date()
 
 # Register handlers to store
 SocketStore.registerAction Const.SET_STATUS, setStatus
