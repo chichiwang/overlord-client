@@ -30,6 +30,13 @@ updateMap = {
   }
 }
 
+menuMap = {
+  boot: ['boot']
+  code: ['code']
+  access: ['access']
+  undefined: ['detonated', 'defused']
+}
+
 # Static methods
 _getStageHeight = ->
   document.querySelector('#Stage').getBoundingClientRect().height
@@ -61,9 +68,10 @@ _page = (socket, menu) ->
 
   currPage
 
-_activeMenu = (menuState, activePage) ->
-  console.log 'menuState', menuState, 'activePage', activePage
-  menuState.selectedItem || activePage
+_activeMenu = (activePage) ->
+  # console.log 'menuState', menuState, 'activePage', activePage
+  for menu, pageList of menuMap
+    return menu if activePage in pageList
 
 _getPageFromBombState = (bombState) ->
   for key, page of pageMap
@@ -89,7 +97,7 @@ Stage = React.createClass
 
     _updateBombStateHistory(bomb?.state)
     activePage = _page(@props.socket, menuState)
-    activeMenu = _activeMenu(menuState, activePage)
+    activeMenu = _activeMenu(activePage)
 
     <div id="Stage" className={ _stageStyles.call(@) }>
       <div className={ _wrapperStyles.call(@) }>
