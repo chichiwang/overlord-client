@@ -28,7 +28,7 @@ _activationProps = ->
     onNext: @nextInput
     onPrev: @prevInput
     onClick: @focus.activation
-    active: @state.activeInput == 1
+    active: @props.active && @state.activeInput == 1
     invalid: @state.activation == @state.deactivation
   }
 
@@ -47,7 +47,7 @@ _deactivationProps = ->
     onNext: @nextInput
     onPrev: @prevInput
     onClick: @focus.deactivation
-    active: @state.activeInput == 2
+    active: @props.active && @state.activeInput == 2
     invalid: @state.activation == @state.deactivation
   }
 
@@ -91,7 +91,7 @@ _prevInput = ->
 _saveProps = ->
   {
     text: "SAVE"
-    active: @state.activeInput == 4
+    active: @props.active && @state.activeInput == 4
     onNext: @nextInput
     onPrev: @prevInput
     onClick: @sendConfig
@@ -112,7 +112,7 @@ _timerProps = ->
     onNext: @nextInput
     onPrev: @prevInput
     onClick: @focus.timer
-    active: @state.activeInput == 3
+    active: @props.active && @state.activeInput == 3
   }
 
 _updateActivation = (val) ->
