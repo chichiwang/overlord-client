@@ -43,6 +43,13 @@ SocketClass = class SocketClass
       @_socket.onerror = _onError
       @_socket.onmessage = _onMessage
 
+    sendInput: (code) ->
+      msg = {
+        command: "input"
+        params: code
+      }
+      @send(msg)
+
     sendConfigure: (activation, deactivation, timer) ->
       msg = {
         command: "configure"

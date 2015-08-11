@@ -25,7 +25,6 @@ pageMap = {
 
 updateMap = {
   inactive: {
-    from: 'boot'
     to: 'code'
   }
 }
@@ -56,6 +55,7 @@ _stageStyles = ->
 _page = (socket, menu) ->
   selectedMenu = menu.selectedItem
   bomb = socket.message
+  # console.log('bomb: ', bomb)
   clientUpdated = bomb?.client_updated
   initialPage = bombStateHistory[0] == undefined && !selectedMenu && !clientUpdated
 
@@ -64,7 +64,7 @@ _page = (socket, menu) ->
   else if clientUpdated && socket.lastUpdated > menu.lastUpdated
     currPage = updateMap[bomb?.state].to
   else
-    currPage = selectedMenu || updateMap[bomb.state].from
+    currPage = selectedMenu || currPage
 
   currPage
 

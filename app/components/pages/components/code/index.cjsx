@@ -2,6 +2,9 @@
 'use strict'
 
 cx = require 'util/cx'
+ws = require 'util/websocket'
+
+
 PageNavigation = require 'util/mixins/pagenavigation'
 
 # Child views
@@ -20,9 +23,9 @@ _inputCodeProps = ->
   }
 
 _sendCode = ->
-  console.log 'Send code: ', @state.currentCode
-  # Reset code input
-  # ws.sendCode(@state.currentCode)
+  code = @state.currentCode
+  @resetState()
+  ws.sendInput(code)
 
 _updateCode = (val) ->
   @setState { currentCode: val }
@@ -52,10 +55,16 @@ Code = React.createClass
       <div className="pane">
         <Input {..._inputCodeProps.call(@)} />
         <div className="save row">
-          <Button text="Submit" active={ @props.active && @state.activeInput ==2 } onClick={ @sendCode } />
+          <Button text="SUBMIT" active={ @props.active && @state.activeInput ==2 } onClick={ @sendCode } />
         </div>
       </div>
     </div>
+
+  resetState: ->
+    @setState {
+      activeInput: 1
+      currentCode: "0000"
+    }
 
   sendCode: ->
     _sendCode.call(@)
