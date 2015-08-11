@@ -21,7 +21,7 @@ _activationProps = ->
     onUpdate: @updateActivation
     onNext: @nextInput
     onPrev: @prevInput
-    onClick: @focus.activation
+    onClick: @focusActivation
     active: @props.active && @state.activeInput == 1
     invalid: @state.activation == @state.deactivation
   }
@@ -40,7 +40,7 @@ _deactivationProps = ->
     onUpdate: @updateDeactivation
     onNext: @nextInput
     onPrev: @prevInput
-    onClick: @focus.deactivation
+    onClick: @focusDeactivation
     active: @props.active && @state.activeInput == 2
     invalid: @state.activation == @state.deactivation
   }
@@ -60,8 +60,11 @@ _saveProps = ->
   }
 
 _sendConfig = ->
-  @focus.save()
+  @focusSave()
   ws.sendConfigure(@state.activation, @state.deactivation, @state.timer)
+
+_setActiveInput = (val) ->
+  @setState { activeInput: val }
 
 _timerProps = ->
   {
@@ -70,7 +73,7 @@ _timerProps = ->
     onUpdate: @updateTimer
     onNext: @nextInput
     onPrev: @prevInput
-    onClick: @focus.timer
+    onClick: @focusTimer
     active: @props.active && @state.activeInput == 3
   }
 
@@ -88,8 +91,6 @@ Boot = React.createClass
   displayName: 'Boot'
   mixins: [PageNavigation]
   numInputs: 4
-
-  focus: undefined
 
   _initState: (props)->
     return false if @stateInit
@@ -110,6 +111,18 @@ Boot = React.createClass
       timer: undefined
     }
 
+  focusActivation: ->
+    _setActiveInput.call(@, 1)
+
+  focusDeactivation: ->
+    _setActiveInput.call(@, 2)
+
+  focusTimer: ->
+    _setActiveInput.call(@, 3)
+
+  focusSave: ->
+    _setActiveInput.call(@, 4)
+
   getInitialState: ->
     {
       activeInput: 1
@@ -125,18 +138,6 @@ Boot = React.createClass
       currState = 'active'
     else if !newProps.active
       currState = 'inactive'
-
-  focus: ->
-    {
-      activation: ->
-        @setState { activeInput: 1 }
-      deactivation: ->
-        @setState { activeInput: 2 }
-      timer: ->
-        @setState { activeInput: 3 }
-      save: ->
-        @setState { activeInput: 4 }
-    }
 
   render: ->
     <div className={ _classes.call(@) }>
