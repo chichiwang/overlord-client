@@ -41,9 +41,18 @@ Menu = React.createClass
 
   componentWillMount: ->
     Factory.setContext(@)
-    Factory.setEnter(_itemEnter.bind(@))
-    Factory.setLeave(_itemLeave.bind(@))
-    Factory.setClick(_itemClick.bind(@))
+    Factory.setEnter(@itemEnter)
+    Factory.setLeave(@itemLeave)
+    Factory.setClick(@itemClick)
+
+  itemClick: (itemName) ->
+    _itemClick.call(@, itemName)
+
+  itemEnter: (itemName) ->
+    _itemEnter.call(@, itemName)
+
+  itemLeave: ->
+    _itemLeave.call(@)
 
   render: ->
     <div id="Menu" className={ @_menuClasses() } style={ @_menuStyles() }>
