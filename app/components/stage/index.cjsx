@@ -23,6 +23,14 @@ pageMap = {
   defused: ['defused']
 }
 
+validPages = {
+  boot: ['boot']
+  inactive: ['boot', 'code', 'access']
+  active: ['code', 'access']
+  detonated: []
+  defused: []
+}
+
 updateMap = {
   inactive: {
     to: 'code'
@@ -37,6 +45,10 @@ menuMap = {
 }
 
 # Static methods
+_activeMenu = (activePage) ->
+  for menu, pageList of menuMap
+    return menu if activePage in pageList
+
 _getStageHeight = ->
   document.querySelector('#Stage').getBoundingClientRect().height
 
@@ -55,22 +67,22 @@ _stageStyles = ->
 _page = (socket, menu) ->
   selectedMenu = menu.selectedItem
   bomb = socket.message
-  # console.log('bomb: ', bomb)
+
   clientUpdated = bomb?.client_updated
   initialPage = bombStateHistory[0] == undefined && !selectedMenu && !clientUpdated
+  invalidCurrPage = !(currPage in validPages[bomb?.state]) if bomb?.state
+  invalidMenuPage = !(selectedMenu in validPages[bomb?.state]) if bomb?.state
 
-  if initialPage
+  if initialPage || invalidCurrPage
     currPage = _getPageFromBombState(bomb?.state)
   else if clientUpdated && socket.lastUpdated > menu.lastUpdated
     currPage = updateMap[bomb?.state].to
+  else if invalidMenuPage
+    currPage = currPage
   else
     currPage = selectedMenu || currPage
 
   currPage
-
-_activeMenu = (activePage) ->
-  for menu, pageList of menuMap
-    return menu if activePage in pageList
 
 _getPageFromBombState = (bombState) ->
   for key, page of pageMap
@@ -109,7 +121,6 @@ Stage = React.createClass
     stageHeight = _getStageHeight()
 
   componentDidUpdate: ->
-    # console.log 'Stage', Menu
     stageHeight = _getStageHeight()
 
 module.exports = Stage

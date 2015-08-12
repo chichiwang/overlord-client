@@ -17,6 +17,7 @@ _inputCodeProps = ->
     label: "Input Code"
     active: @props.active && @state.activeInput == 1
     val: @state.currentCode
+    onClick: @focusInput
     onNext: @nextInput
     onPrev: @prevInput
     onUpdate: @updateCode
@@ -26,6 +27,9 @@ _sendCode = ->
   code = @state.currentCode
   @resetState()
   ws.sendInput(code)
+
+_setActiveInput = (val) ->
+  @setState { activeInput: val }
 
 _updateCode = (val) ->
   @setState { currentCode: val }
@@ -42,6 +46,9 @@ Code = React.createClass
       page: true
       active: @props.active
     })
+
+  focusInput: ->
+    _setActiveInput.call(@, 1)
 
   getInitialState: ->
     {
